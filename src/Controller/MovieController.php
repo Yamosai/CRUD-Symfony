@@ -64,4 +64,14 @@ class MovieController extends AbstractController
             'form' => $form
         ]);
     }
+
+    #[Route('/view/{id}', name: 'viewSolo')]
+    public function viewsSolo(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $movie = $entityManager->getRepository(Movie::class)->findOneBy(['id' => $id]);
+
+        return $this->render('movie/movie.html.twig', [
+            'movie' => $movie,
+        ]);
+    }
 }

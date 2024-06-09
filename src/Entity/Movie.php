@@ -30,11 +30,11 @@ class Movie implements IdInterface, NameInterface
     #[ORM\Column(type: 'string', nullable: true)]
     private ?float $synopsis = null;
 
-    #[ORM\ManyToOne(targetEntity: Category::class, inversedBy: 'Movie')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'Movie')]
     #[ORM\JoinColumn(nullable: false)]
     private ?float $Category = null;
 
-    #[ORM\ManyToOne(targetEntity: Producer::class, inversedBy: 'Movie')]
+    #[ORM\OneToOne(targetEntity: Producer::class, inversedBy: 'Movie')]
     #[ORM\JoinColumn(nullable: false)]
     private ?float $Producer = null;
 

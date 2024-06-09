@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des film{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}  
+        {% for category in form.categories %}
+            {{ form_row(category) }}
+        {% endfor %}
+    {{ form_end(form) }}
+{% endblock %}

@@ -28,7 +28,7 @@ class Movie implements IdInterface, NameInterface
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private ?float $synopsis = null;
+    private ?string $synopsis = null;
 
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
@@ -92,14 +92,14 @@ class Movie implements IdInterface, NameInterface
         return $this;
     }
 
-    public function getProducer(): ?string
+    public function getProducer(): ?Producer
     {
         return $this->producer;
     }
 
-    public function setProducer(string $IdProducer): static
+    public function setProducer(Producer $producer): static
     {
-        $this->producer = $IdProducer;
+        $this->producer = $producer;
 
         return $this;
     }

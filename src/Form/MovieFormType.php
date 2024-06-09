@@ -32,7 +32,7 @@ class MovieFormType extends AbstractType
                 'placeholder' => "Saissisez la date de sortie du film",
                 ],
             ])
-            ->add('synospis', TextType::class, [
+            ->add('synopsis', TextType::class, [
                 'label' => "Synospis film :",
                 'required' => false,
                 'attr' => [

@@ -23,15 +23,11 @@ class Producer implements IdInterface
 {
     use IdTrait;
 
-    #[ORM\OneToMany(mappedBy: 'Producer', targetEntity: Movie::class)]
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?Movie $movie = null;
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $firstName = null;
 
     #[ORM\Column(type: 'string', nullable: true)]
-    private ?float $firstName = null;
-
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?float $lastName = null;
+    private ?string $lastName = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE , nullable: true )]
     private ?\DateTimeInterface $dateBirthday = null;

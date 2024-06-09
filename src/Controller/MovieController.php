@@ -74,4 +74,15 @@ class MovieController extends AbstractController
             'movie' => $movie,
         ]);
     }
+
+    #[Route('/delete/{id}', name: 'delete')]
+    public function delete(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $movie = $entityManager->getRepository(Movie::class)->findOneBy(['id' => $id]);
+
+        $entityManager->remove($movie);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('view');
+    }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Form;
 
+use App\Entity\Category;
 use App\Entity\Movie;
+use App\Entity\Producer;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -35,8 +38,24 @@ class MovieFormType extends AbstractType
                 'attr' => [
                 'placeholder' => "Saissisez le synospis du film",
                 ],
+            ])  
+            ->add('categories', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'name',
+                'multiple' => true,
+                'expanded' => true,
+                'required' => true,
+                'label' => false,
             ])
-            // submit      
+            ->add('producer', EntityType::class, [
+                'class' => Producer::class,
+                'choice_label' => function ($producer) {
+                    return $producer->getLastName() . " " . $producer->getFirstname();
+                },
+                'multiple' => false,
+                'required' => true,
+                'label' => "Producteur :",
+            ])
             ->add('submit', SubmitType::class, [
                 'label' => "Enregistrer",
             ]

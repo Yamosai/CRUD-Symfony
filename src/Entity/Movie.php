@@ -30,13 +30,18 @@ class Movie implements IdInterface, NameInterface
     #[ORM\Column(type: 'string', nullable: true)]
     private ?float $synopsis = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'Movie')]
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'movies')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?float $Category = null;
+    private ?Collection $categories = null;
 
-    #[ORM\OneToOne(targetEntity: Producer::class, inversedBy: 'Movie')]
+    #[ORM\ManyToOne(targetEntity: Producer::class, inversedBy: 'movie')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?float $Producer = null;
+    private ?Producer $producer = null;
+
+    public function __construct()
+    {
+        $this->categories = new ArrayCollection();
+    }
 
     public function getDate(): ?\DateTimeInterface
     {
@@ -61,27 +66,40 @@ class Movie implements IdInterface, NameInterface
 
         return $this;
     }
-
-    public function getIdCategory(): ?string
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getCategories(): Collection
     {
-        return $this->Category;
+      return $this->categories;
     }
 
-    public function setIdCategory(string $Category): static
+    public function addCategory(Category $category): self
     {
-        $this->Category = $Category;
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+            $category->addMovie($this); 
+        }
 
         return $this;
     }
 
-    public function getIdProducer(): ?string
+    public function removeCategory(Category $category): self
     {
-        return $this->Producer;
+        $this->categories->removeElement($category);
+        $category->removeMovie($this);
+
+        return $this;
     }
 
-    public function setIdIdProducer(string $IdProducer): static
+    public function getProducer(): ?string
     {
-        $this->Producer = $IdProducer;
+        return $this->producer;
+    }
+
+    public function setProducer(string $IdProducer): static
+    {
+        $this->producer = $IdProducer;
 
         return $this;
     }

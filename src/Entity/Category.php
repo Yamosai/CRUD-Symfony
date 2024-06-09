@@ -7,11 +7,8 @@ use App\Entity\Interfaces\IdInterface;
 use App\Entity\Traits\IdTrait;
 use App\Entity\Interfaces\NameInterface;
 use App\Entity\Traits\NameTrait;
-use App\Entity\Interfaces\CommentaryInterface;
-use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -22,7 +19,35 @@ class Category implements IdInterface, NameInterface
     use IdTrait;
     use NameTrait;
     
-    #[ORM\OneToMany(mappedBy: 'Category', targetEntity: Movie::class)]
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?Movie $movie = null;      
+    #[ORM\ManyToMany(mappedBy: 'categories', targetEntity: Movie::class)]
+    private ?Collection $movies;      
+
+    public function __construct()
+    {
+        $this->movies = new ArrayCollection();
+    }
+
+    /**
+     * @return Collection<int, Movie>
+     */
+    public function getMovies(): Collection
+    {
+      return $this->movies;
+    }
+
+    public function addMovie(Movie $movies): self
+    {
+        if (!$this->movies->contains($movies)) {
+            $this->movies[] = $movies;
+        }
+
+        return $this;
+    }
+
+    public function removeMovie(Movie $movies): self
+    {
+        $this->movies->removeElement($movies);
+
+        return $this;
+    }
 }

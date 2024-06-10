@@ -25,9 +25,9 @@ class Movie implements IdInterface, NameInterface
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $synopsis = null;
 
-    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'movies')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Collection $categories = null;
+    #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'movies', cascade: ["persist"])]
+    #[ORM\JoinTable(name: 'movie_category')]
+    private Collection $categories;
 
     #[ORM\ManyToOne(targetEntity: Producer::class, inversedBy: 'movie')]
     #[ORM\JoinColumn(nullable: false)]
@@ -81,8 +81,9 @@ class Movie implements IdInterface, NameInterface
 
     public function removeCategory(Category $category): self
     {
-        $this->categories->removeElement($category);
-        $category->removeMovie($this);
+        if ($this->categories->removeElement($category)) {
+            $category->removeMovie($this);
+        }
 
         return $this;
     }

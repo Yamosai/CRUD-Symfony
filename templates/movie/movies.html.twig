@@ -5,5 +5,15 @@
 {% block body %}
     {% for movie in movies %}
         {{ movie.name }}
+        {{ movie.synopsis }}
+        {{ movie.producer.firstName}}
+        {{ movie.producer.LastName}}
+        {% for category in movies %}
+             {{ category.name}}
+        {% endfor %}
+        <a href={{ path('viewSolo', {'id': movie.id} ) }}>Voir</a>
+        <a href={{ path('update', {'id': movie.id} ) }}>Modifier</a>
+        <a href={{ path('delete', {'id': movie.id} ) }}>Supprimer</a>
     {% endfor %}
+    <a href={{ path('add' ) }}>Ajouter</a>
 {% endblock %}

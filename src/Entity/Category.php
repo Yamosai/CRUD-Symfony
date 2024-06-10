@@ -20,7 +20,7 @@ class Category implements IdInterface, NameInterface
     use NameTrait;
     
     #[ORM\ManyToMany(mappedBy: 'categories', targetEntity: Movie::class)]
-    private ?Collection $movies;      
+    private Collection $movies; 
 
     public function __construct()
     {
@@ -35,18 +35,21 @@ class Category implements IdInterface, NameInterface
       return $this->movies;
     }
 
-    public function addMovie(Movie $movies): self
+    public function addMovie(Movie $movie): self
     {
-        if (!$this->movies->contains($movies)) {
-            $this->movies[] = $movies;
+        if (!$this->movies->contains($movie)) {
+            $this->movies[] = $movie;
+            $movie->addCategory($this); // Ensure bidirectional relationship is maintained
         }
 
         return $this;
     }
 
-    public function removeMovie(Movie $movies): self
+    public function removeMovie(Movie $movie): self
     {
-        $this->movies->removeElement($movies);
+        if ($this->movies->removeElement($movie)) {
+            $movie->removeCategory($this); // Ensure bidirectional relationship is maintained
+        }
 
         return $this;
     }

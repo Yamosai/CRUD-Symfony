@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Movie;
+use App\Form\FilterMovieFormType;
 use App\Form\MovieFormType;
 use App\Repository\MovieRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -14,12 +15,22 @@ use Symfony\Component\Routing\Annotation\Route;
 class MovieController extends AbstractController
 {
     #[Route('/', name: 'view')]
-    public function view(MovieRepository $movieRepository): Response {
+    public function view(MovieRepository $movieRepository, Request $request): Response {
 
         $movies = $movieRepository->findAll();
 
+        $form = $this->createForm(FilterMovieFormType::class);
+        $form->handleRequest($request);
+        
+        if ($form->isSubmitted() && $form->isValid()) {
+            $movies = $movieRepository->filterMovie(
+                $form->get('name')->getData(),
+            );
+        }
+
         return $this->render('movie/movies.html.twig', [
-            'movies' => $movies
+            'movies' => $movies,
+            'form' => $form
         ]);
     }
 
@@ -85,4 +96,6 @@ class MovieController extends AbstractController
 
         return $this->redirectToRoute('view');
     }
+
+    
 }

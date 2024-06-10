@@ -5,21 +5,24 @@
 {% block body %}
 
     {{ form_start(form) }}
-        <div class="admin__link">
-            <button type="submit">Afficher</button>
-        </div>
     {{ form_end(form) }}
+    <button type="submit">Afficher</button>
+    <br>
     <a href={{ path('add' ) }}>Ajouter</a>
+    <br><br>
     {% for movie in movies %}
         {{ movie.name }}
         {{ movie.synopsis }}
         {{ movie.producer.firstName}}
         {{ movie.producer.LastName}}
-        {% for category in movies %}
+        {{ movie.date|date('d-m-y') }}
+        {% for category in movie.categories %}
              {{ category.name}}
         {% endfor %}
+        <br>
         <a href={{ path('update', {'id': movie.id} ) }}>Modifier</a>
         <a href={{ path('delete', {'id': movie.id} ) }}>Supprimer</a>
         <a href={{ path('viewSolo', {'id': movie.id} ) }}>Voir</a>
+        <br><br>
     {% endfor %}
 {% endblock %}

@@ -4,4 +4,11 @@
 
 {% block body %}
     {{ movie.name }}
+    {{ movie.synopsis }}
+    {{ movie.producer.firstName}}
+    {{ movie.producer.lastName}}
+    {{ movie.date|date('d-m-y') }}
+    {% for category in movie.categories %}
+            {{ category.name}}
+    {% endfor %}
 {% endblock %}
